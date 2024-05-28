@@ -1,0 +1,2 @@
+#!/bin/bash
+num_directories=$(find . -type d -mindepth 1 -not -name ".*" | wc -l); echo "$num_directories"
