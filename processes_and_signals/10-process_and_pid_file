@@ -5,9 +5,9 @@
 echo $$ > /var/run/myscript.pid
 
 # Define signal handlers
-trap 'echo "I hate the kill command"' SIGTERM
+trap 'echo "I hate the kill command"; exit' SIGTERM
 trap 'echo "Y U no love me?!"' SIGINT
-trap 'rm -f /var/run/myscript.pid; echo "PID file deleted"; exit' SIGQUIT SIGTERM
+trap 'rm -f /var/run/myscript.pid; echo "PID file deleted"; exit' SIGQUIT
 
 # Infinite loop
 while true; do
