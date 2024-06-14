@@ -1,44 +1,22 @@
 #!/usr/bin/env bash
 # This script manages the manage_my_process script
 
-start_process() {
-    if [ ! -f /var/run/my_process.pid ]; then
-        ./manage_my_process &
-        echo $! > /var/run/my_process.pid
-        echo "manage_my_process started"
-    else
-        echo "manage_my_process is already running"
-    fi
-}
-
-stop_process() {
-    if [ -f /var/run/my_process.pid ]; then
-        PID=$(cat /var/run/my_process.pid)
-        if kill $PID; then
-            rm /var/run/my_process.pid
-            echo "manage_my_process stopped"
-        else
-            echo "Failed to stop manage_my_process"
-        fi
-    else
-        echo "manage_my_process is not running"
-    fi
-}
+MANAGE_SCRIPT="./manage_my_process"
 
 case "$1" in
     start)
-        start_process
+        sudo $MANAGE_SCRIPT start
         ;;
     stop)
-        stop_process
+        sudo $MANAGE_SCRIPT stop
         ;;
     restart)
-        stop_process
-        start_process
-        echo "manage_my_process restarted"
+        sudo $MANAGE_SCRIPT restart
         ;;
     *)
-        echo "Usage: manage_my_process {start|stop|restart}"
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
         ;;
 esac
 
+exit 0
