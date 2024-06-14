@@ -1,41 +1,13 @@
 #!/usr/bin/env bash
-# This script manages the manage_my_process script
+#The script creates the file "myscript.pid" with its PID then displays "to infinity and beyond" indefinitely, displays a message when receiving the SIGTERM and SIGINT signals then deletes myscript.pid
 
-# Path to manage_my_process script
-MANAGE_SCRIPT="./manage_my_process"
+echo $$ > /var/run/myscript.pid
 
-# Path to PID file
-PID_FILE="/var/run/my_process.pid"
+trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit' SIGTERM
+trap 'echo "Y U no love me?!";' SIGINT
+trap 'rm -f /var/run/myscript.pid; exit' SIGQUIT
 
-case "$1" in
-    start)
-        # Start the process
-        echo "Starting manage_my_process..."
-        $MANAGE_SCRIPT &
-        echo $! > $PID_FILE
-        echo "manage_my_process started"
-        ;;
-    stop)
-        # Stop the process
-        echo "Stopping manage_my_process..."
-        kill "$(cat $PID_FILE)"
-        rm -f $PID_FILE
-        echo "manage_my_process stopped"
-        ;;
-    restart)
-        # Restart the process
-        echo "Restarting manage_my_process..."
-        $0 stop
-        sleep 1
-        $0 start
-        echo "manage_my_process restarted"
-        ;;
-    *)
-        # Invalid argument
-        echo "Usage: $0 {start|stop|restart}"
-        exit 1
-        ;;
-esac
-
-exit 0
-
+while true; do
+  echo "To infinity and beyond"
+  sleep 1
+done 

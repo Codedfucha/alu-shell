@@ -1,22 +1,31 @@
 #!/usr/bin/env bash
-# This script manages the manage_my_process script
-
-MANAGE_SCRIPT="./manage_my_process"
-
-case "$1" in
-    start)
-        sudo $MANAGE_SCRIPT start
-        ;;
-    stop)
-        sudo $MANAGE_SCRIPT stop
-        ;;
-    restart)
-        sudo $MANAGE_SCRIPT restart
-        ;;
-    *)
-        echo "Usage: $0 {start|stop|restart}"
-        exit 1
-        ;;
-esac
-
-exit 0
+# The script manages daemons according to certain conditions
+                                                  
+start () {                                         
+    ./manage_my_process &                          
+    echo $! > /var/run/my_process.pid              
+    echo "manage_my_process started"               
+}                                                  
+                                                   
+stop () {                                          
+    pkill -f "./manage_my_process"                 
+    rm /var/run/my_process.pid                     
+    echo "manage_my_process stopped"               
+}                                                  
+                                                   
+restart () {                                       
+    pkill -f "./manage_my_process"                 
+    rm /var/run/my_process.pid                     
+    ./manage_my_process &                          
+    echo $! >> /var/run/my_process.pid             
+    echo "manage_my_process restarted"             
+}
+case "$1" in                                       
+   start) start ;;                                 
+   stop)  stop;;                                   
+   restart) restart;;                              
+   *) echo "Usage: manage_my_process {start|stop|r\
+estart}"                                           
+                                                   
+      ;;                                           
+esac                    
