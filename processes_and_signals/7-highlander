@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# This script stops the 7-highlander process
+# This script displays "To infinity and beyond" indefinitely and responds to SIGTERM with "I am invincible!!!"
+trap 'echo "I am invincible!!!"' SIGTERM
 while true; do
     echo "To infinity and beyond"
     sleep 2
